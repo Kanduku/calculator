@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #6CA0DC;
+            font-family: Arial, sans-serif;
+        }
+
+        .calculator {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #e0e0e0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #display {
+            width: 100%;
+            height: 80px;
+            background: #e8f0fe;
+            color: #000;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 20px;
+            background: #90CAF9;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #64B5F6;
+        }
+
+        .operator {
+            background: #FF7043;
+            color: #fff;
+        }
+
+        .operator:hover {
+            background: #FF5722;
+        }
+
+        #clear, #equals {
+            grid-column: span 2;
+        }
+
+        #clear {
+            background: #FF5252;
+            color: #fff;
+        }
+
+        #clear:hover {
+            background: #FF1744;
+        }
+
+        #equals {
+            background: #66BB6A;
+            color: #fff;
+        }
+
+        #equals:hover {
+            background: #43A047;
+        }
+
+        @media (max-width: 768px) {
+            #display {
+                font-size: 1.5em;
+                height: 60px;
+            }
+            .btn {
+                padding: 15px;
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #display {
+                font-size: 1.2em;
+                height: 50px;
+            }
+            .btn {
+                padding: 10px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div id="display">
+            <span id="expression">0</span>
+            <span id="result"></span>
+        </div>
+        <div class="buttons">
+            <button class="btn" data-value="(">(</button>
+            <button class="btn" data-value=")">)</button>
+            <button class="btn" id="ans">ans</button>
+            <button class="btn" id="del">del</button>
+            <button class="btn" data-value="7">7</button>
+            <button class="btn" data-value="8">8</button>
+            <button class="btn" data-value="9">9</button>
+            <button class="btn operator" data-value="/">÷</button>
+            <button class="btn" data-value="4">4</button>
+            <button class="btn" data-value="5">5</button>
+            <button class="btn" data-value="6">6</button>
+            <button class="btn operator" data-value="*">x</button>
+            <button class="btn" data-value="1">1</button>
+            <button class="btn" data-value="2">2</button>
+            <button class="btn" data-value="3">3</button>
+            <button class="btn operator" data-value="-">-</button>
+            <button class="btn" data-value=".">.</button>
+            <button class="btn" data-value="0">0</button>
+            <button class="btn operator" data-value="+">+</button>
+            <button class="btn operator" id="equals">ENTER</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.btn');
+            const displayExpression = document.getElementById('expression');
+            const displayResult = document.getElementById('result');
+            const ansButton = document.getElementById('ans');
+            const delButton = document.getElementById('del');
+            const equalsButton = document.getElementById('equals');
+            const clearButton = document.getElementById('clear');
+            let expression = '';
+            let lastResult = '';
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const value = this.getAttribute('data-value');
+                    if (value !== null) {
+                        expression += value;
+                        displayExpression.textContent = expression;
+                    }
+                });
+            });
+
+            delButton.addEventListener('click', function () {
+                expression = expression.slice(0, -1);
+                displayExpression.textContent = expression || '0';
+            });
+
+            equalsButton.addEventListener('click', function () {
+                try {
+                    const result = eval(expression.replace('÷', '/').replace('x', '*'));
+                    lastResult = result;
+                    displayResult.textContent = result;
+                } catch {
+                    displayResult.textContent = 'Error';
+                }
+            });
+
+            ansButton.addEventListener('click', function () {
+                expression += lastResult;
+                displayExpression.textContent = expression;
+            });
+
+            clearButton.addEventListener('click', function () {
+                expression = '';
+                displayExpression.textContent = '0';
+                displayResult.textContent = '';
+            });
+        });
+    </script>
+</body>
+</html>
